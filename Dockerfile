@@ -17,4 +17,4 @@ RUN git config --global user.name github-actions && \
     git config --global user.email github-actions@github.com
 
 # The working directory is already set in the structurizr/cli image, but we need to set it again
-WORKDIR /usr/local/structurizr-cli/
+WORKDIR /usr/local/structurizr/
