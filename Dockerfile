@@ -1,12 +1,12 @@
-# Use a multi-stage build to keep the final image clean and small
+# Builder stage
 FROM eclipse-temurin:17.0.8.1_1-jre-jammy as builder
 
 # Set the working directory
 WORKDIR /build
 
-# Install dependencies in a single layer and clean up more efficiently
+# Install dependencies and clean up
 RUN apt-get update && \
-    apt-get install -y unzip git graphviz jq && \
+    apt-get install -y unzip && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
@@ -15,10 +15,9 @@ RUN wget https://downloads.sourceforge.net/project/plantuml/plantuml.jar -O /usr
     echo '#!/bin/bash\njava -jar /usr/local/bin/plantuml.jar "$@"' > /usr/local/bin/plantuml && \
     chmod +x /usr/local/bin/plantuml
 
-# Copy the Structurizr CLI zip
-COPY structurizr-cli-*.zip /build/
 
-# Unzip Structurizr CLI into a specific directory, move the contents, and remove the zip file
+# Copy and setup Structurizr CLI
+COPY structurizr-cli-*.zip /build/
 RUN mkdir /build/structurizr-cli && \
     unzip structurizr-cli-*.zip -d /build/structurizr-cli && \
     chmod +x /build/structurizr-cli/structurizr.sh && \
@@ -33,16 +32,20 @@ USER structurizr
 
 # Copy necessary files from builder stage
 COPY --from=builder /build /usr/local/structurizr-cli
-COPY --from=builder /usr/local/bin/plantuml.jar /usr/local/bin/plantuml.jar
-COPY --from=builder /usr/local/bin/plantuml /usr/local/bin/plantuml
+COPY --from=builder /usr/local/bin/plantuml.jar /usr/local/bin/
+COPY --from=builder /usr/local/bin/plantuml /usr/local/bin/
 
-# Set the working directory
+# Set the working directory and update PATH
 WORKDIR /usr/local/structurizr-cli
+ENV PATH /usr/local/structurizr-cli/:/usr/local/bin/:$PATH
 
-# Update PATH
-ENV PATH /usr/local/structurizr-cli/:$PATH
+# Install dependencies and clean up
+RUN apt-get update && \
+    apt-get install -y graphviz jq git && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
-# Setup Git
+# Setup Git configuration
 RUN git config --global user.name github-actions && \
     git config --global user.email github-actions@github.com
 
