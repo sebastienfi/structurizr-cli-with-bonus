@@ -4,7 +4,7 @@ FROM eclipse-temurin:17.0.8.1_1-jre-jammy as builder
 # Set the working directory
 WORKDIR /build
 
-# Install dependencies in a single layer and clean up
+# Install dependencies in a single layer and clean up more efficiently
 RUN apt-get update && \
     apt-get install -y unzip git graphviz jq && \
     apt-get clean && \
@@ -18,10 +18,11 @@ RUN wget https://downloads.sourceforge.net/project/plantuml/plantuml.jar -O /usr
 # Copy the Structurizr CLI zip
 COPY structurizr-cli-*.zip /build/
 
-# Unzip Structurizr CLI
-RUN unzip structurizr-cli-*.zip && \
-    mv structurizr-cli-*/* /build/ && \
-    chmod +x structurizr.sh
+# Unzip Structurizr CLI into a specific directory, move the contents, and remove the zip file
+RUN mkdir /build/structurizr-cli && \
+    unzip structurizr-cli-*.zip -d /build/structurizr-cli && \
+    chmod +x /build/structurizr-cli/structurizr.sh && \
+    rm structurizr-cli-*.zip
 
 # Final image
 FROM eclipse-temurin:17.0.8.1_1-jre-jammy
