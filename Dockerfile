@@ -14,7 +14,7 @@ RUN wget https://downloads.sourceforge.net/project/plantuml/plantuml.jar -O /usr
     echo '#!/bin/bash\njava -jar /usr/local/bin/plantuml.jar "$@"' > /usr/local/bin/plantuml && \
     chmod +x /usr/local/bin/plantuml
 
-COPY build/distributions/structurizr-cli-*.zip ./
+COPY structurizr-cli-*.zip ./
 RUN unzip /usr/local/structurizr-cli/structurizr-cli-*.zip && chmod +x structurizr.sh
 
 # Setup Git

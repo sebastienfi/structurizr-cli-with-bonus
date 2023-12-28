@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'build/distributions/structurizr-cli-zip.zip'
+      - 'structurizr-cli-*.zip'
       - 'Dockerfile'
 jobs:
   docker:
