@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - main
-
+    paths:
+      - 'build/distributions/structurizr-cli-zip.zip'
+      - 'Dockerfile'
 jobs:
   docker:
     runs-on: ubuntu-latest
