@@ -4,7 +4,7 @@ This Docker image extends the `structurizr/cli` image, including additional tool
 
 ## Why do I need this?
 
-This image is used as a container for the GitHub Action `sebastienfi/structurizr-gen-images` which allows you to generate images for your views automatically for each PR which modifies the `workspace.dsl` file. The generated images are committed into the PR. [Read more about this action](#). A second action `sebastienfi/structurizr-pr-comment` makes a comment on the pull request with the generated images.
+This image is used as a container for the GitHub Action `sebastienfi/structurizr-gen-images` which allows you to generate images for your views automatically for each PR which modifies the `workspace.dsl` file. The generated images are committed into the PR. [Read more about this action](https://github.com/marketplace/actions/generate-structurizr-diagrams-images-from-dsl). A second action `sebastienfi/structurizr-pr-comment` makes a comment on the pull request with the generated images.
 
 You can also build on top of it your own action, or use it locally to generate images without having to install PlantUML or Graphviz yourself.
 
