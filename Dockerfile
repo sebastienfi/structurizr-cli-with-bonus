@@ -4,11 +4,9 @@ FROM eclipse-temurin:17.0.8.1_1-jre-jammy as builder
 # Set the working directory
 WORKDIR /build
 
-# Install dependencies and clean up
+# Install dependencies
 RUN apt-get update && \
-    apt-get install -y unzip && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+    apt-get install -y unzip
 
 # Install PlantUML
 RUN wget https://downloads.sourceforge.net/project/plantuml/plantuml.jar -O /usr/local/bin/plantuml.jar && \
